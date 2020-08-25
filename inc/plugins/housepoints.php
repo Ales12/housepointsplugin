@@ -592,31 +592,19 @@ function housepoints_profile(){
 
     }
 
-    //Hauspunkte im profil
-    $uid = $memprofile['uid'];
-    $group_sect = $db->simple_select("usergroups", "gid,title", "gid IN ('".str_replace(',', '\',\'', $mybb->settings['hp_groups'])."')");
+  /*
+     * die Hauspunkte noch im Profil ausgeben
+     */
 
-    while($house = $db->fetch_array($group_sect)){
 
-        $select = $db->query("SELECT *
-     FROM ".TABLE_PREFIX."users u
-    LEFT JOIN ".TABLE_PREFIX."usergroups ug
-    ON u.usergroup = ug.gid
-    LEFT JOIN ".TABLE_PREFIX."userfields uf
-    ON uf.ufid = u.uid
-    WHERE u.usergroup = $house[gid]
-    AND u.uid = $uid ");
+    $select = $db->query("SELECT *, hp_points
+    FROM ".TABLE_PREFIX."users
+    where uid = '".$memprofile[uid]."'
+    ");
 
-        $housepoints = 0;
-
-        while($row = $db->fetch_array($select)){
-
-            $alt_bg = alt_trow();
-            $housepoints = number_format($row['hp_points'], '0', ',', '.');
+    $row = $db->fetch_array($select);
+    $housepoints = number_format($row['hp_points'], '0', ',', '.');
             eval("\$profile_points = \"". $templates->get("housepoints_profile_points")."\";");
-        }
-
-    }
 
 }
 
