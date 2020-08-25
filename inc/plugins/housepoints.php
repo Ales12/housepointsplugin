@@ -470,7 +470,7 @@ function housepoints_activate()
     find_replace_templatesets("member_profile", "#".preg_quote('{$online_status}')."#i", '{$online_status} <br /> {$profile_points} ');
     find_replace_templatesets("header", "#".preg_quote('{$pm_notice}')."#i", '{$housepoints_header} {$pm_notice}');
     find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'userstars\']} ')."#i", '{$user[\'userstars\']} <br /> {$housepoints_memberlist_bit}');
-    find_replace_templatesets("modcp_nav_users", "#".preg_quote('	{$nav_editprofile} ')."#i", '	{$nav_editprofile} <br /> {$housepoints_memberlist_bit}');
+    find_replace_templatesets("modcp_nav_users", "#".preg_quote('	{$nav_editprofile} ')."#i", '	{$nav_editprofile} <br /> {$modcp_hp}');
 
 
 
@@ -484,6 +484,7 @@ function housepoints_deactivate()
     find_replace_templatesets("member_profile", "#".preg_quote('<br /> {$profile_points}')."#i", '', 0);
     find_replace_templatesets("header", "#".preg_quote('{$housepoints_header}')."#i", '', 0);
     find_replace_templatesets("memberlist_user", "#".preg_quote('<br />{$housepoints_memberlist_bit}')."#i", '', 0);
+    find_replace_templatesets("modcp_nav_users", "#".preg_quote('<br />{$modcp_hp}')."#i", '', 0);
 }
 
 
