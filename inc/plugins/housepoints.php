@@ -813,7 +813,7 @@ function housepoints_postbit(&$post)
 function housepoints_modcp_nav(){
     global $db, $templates, $mybb, $modcp_hp;
     $modcp_hp = "<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte</a></td></tr>
-<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints_protocol' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte Protokol</a></td></tr>
+<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints_protocol' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte Protokoll</a></td></tr>
 ";
 }
 
