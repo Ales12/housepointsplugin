@@ -586,7 +586,7 @@ function housepoints_profile(){
 
         }
 
-        if(is_member($mybb->settings['hp_groups']){
+        if(is_member($mybb->settings['hp_groups'])){
             eval("\$profile_hp_options = \"" . $templates->get("housepoints_profile_options") . "\";");
         }
 
