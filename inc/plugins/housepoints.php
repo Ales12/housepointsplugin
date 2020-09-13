@@ -586,7 +586,7 @@ function housepoints_profile(){
 
         }
 
-        if($memprofile['usergroup'] == 8 OR $memprofile['usergroup'] == 9 OR $memprofile['usergroup'] == 10 OR $memprofile['usergroup'] == 11){
+        if(is_member($mybb->settings['hp_groups']){
             eval("\$profile_hp_options = \"" . $templates->get("housepoints_profile_options") . "\";");
         }
 
