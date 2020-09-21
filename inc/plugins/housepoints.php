@@ -1022,8 +1022,8 @@ function housepoints_location_activity($plugin_array) {
  * Was passiert wenn ein User gelöscht wird
  * Informationen aus dem Protokoll löschen, so dass keine Gästeinfos mehr vorhanden sind.
  */
-$plugins->add_hook("admin_user_users_delete_commit_end", "user_delete");
-function user_delete()
+$plugins->add_hook("admin_user_users_delete_commit_end", "housepoints_delete");
+function housepoints_delete()
 {
     global $db, $cache, $mybb, $user;
 
