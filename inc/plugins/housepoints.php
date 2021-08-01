@@ -6,6 +6,9 @@
  * Time: 14:03
  */
 
+//error_reporting(-1);
+//ini_set('display_errors', true);
+
 if(!defined("IN_MYBB"))
 {
     die("Direct initialization of this file is not allowed.");
@@ -470,7 +473,7 @@ function housepoints_activate()
     find_replace_templatesets("member_profile", "#".preg_quote('{$online_status}')."#i", '{$online_status} <br /> {$profile_points} ');
     find_replace_templatesets("header", "#".preg_quote('{$pm_notice}')."#i", '{$housepoints_header} {$pm_notice}');
     find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'userstars\']} ')."#i", '{$user[\'userstars\']} <br /> {$housepoints_memberlist_bit}');
-    find_replace_templatesets("modcp_nav_users", "#".preg_quote('	{$nav_editprofile} ')."#i", '	{$nav_editprofile} <br /> {$modcp_hp}');
+    find_replace_templatesets("modcp_nav_users", "#".preg_quote('	{$nav_editprofile} ')."#i", '	{$nav_editprofile} <br /> {$housepoints_memberlist_bit}');
 
 
 
@@ -484,7 +487,6 @@ function housepoints_deactivate()
     find_replace_templatesets("member_profile", "#".preg_quote('<br /> {$profile_points}')."#i", '', 0);
     find_replace_templatesets("header", "#".preg_quote('{$housepoints_header}')."#i", '', 0);
     find_replace_templatesets("memberlist_user", "#".preg_quote('<br />{$housepoints_memberlist_bit}')."#i", '', 0);
-    find_replace_templatesets("modcp_nav_users", "#".preg_quote('<br />{$modcp_hp}')."#i", '', 0);
 }
 
 
@@ -586,25 +588,37 @@ function housepoints_profile(){
 
         }
 
-        if(is_member($mybb->settings['hp_groups'])){
+        if($memprofile['usergroup'] == 8 OR $memprofile['usergroup'] == 9 OR $memprofile['usergroup'] == 10 OR $memprofile['usergroup'] == 11){
             eval("\$profile_hp_options = \"" . $templates->get("housepoints_profile_options") . "\";");
         }
 
     }
 
-  /*
-     * die Hauspunkte noch im Profil ausgeben
-     */
+    //Hauspunkte im profil
+    $uid = $memprofile['uid'];
+    $group_sect = $db->simple_select("usergroups", "gid,title", "gid IN ('".str_replace(',', '\',\'', $mybb->settings['hp_groups'])."')");
 
+    while($house = $db->fetch_array($group_sect)){
 
-    $select = $db->query("SELECT *, hp_points
-    FROM ".TABLE_PREFIX."users
-    where uid = '".$memprofile[uid]."'
-    ");
+        $select = $db->query("SELECT *
+     FROM ".TABLE_PREFIX."users u
+    LEFT JOIN ".TABLE_PREFIX."usergroups ug
+    ON u.usergroup = ug.gid
+    LEFT JOIN ".TABLE_PREFIX."userfields uf
+    ON uf.ufid = u.uid
+    WHERE u.usergroup = $house[gid]
+    AND u.uid = $uid ");
 
-    $row = $db->fetch_array($select);
-    $housepoints = number_format($row['hp_points'], '0', ',', '.');
+        $housepoints = 0;
+
+        while($row = $db->fetch_array($select)){
+
+            $alt_bg = alt_trow();
+            $housepoints = number_format($row['hp_points'], '0', ',', '.');
             eval("\$profile_points = \"". $templates->get("housepoints_profile_points")."\";");
+        }
+
+    }
 
 }
 
@@ -675,8 +689,10 @@ function wanted_newthread(){
             //Punkte pro Post werden drauf gerechnet.
             $db->query("UPDATE " . TABLE_PREFIX . "users SET hp_points = hp_points + '" . $postpoints . "'  WHERE uid = $uid");
 
+            $shortpost = strlen($data['message']);
+
             //Wenn jemand fleißig war, bekommt er zusätzliche Punkte
-            if (strlen($data['message']) >= $min_postlength) {
+            if ($shortpost >= $min_postlength) {
 
                 $postpoints = $postpoints + $morepostpoints;
                 $db->query("UPDATE " . TABLE_PREFIX . "users SET hp_points = hp_points + '" . $morepostpoints . "'  WHERE uid = $uid");
@@ -801,7 +817,7 @@ function housepoints_postbit(&$post)
 function housepoints_modcp_nav(){
     global $db, $templates, $mybb, $modcp_hp;
     $modcp_hp = "<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte</a></td></tr>
-<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints_protocol' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte Protokoll</a></td></tr>
+<tr><td class=\"trow1 smalltext\"><a href='modcp.php?action=housepoints_protocol' class=\"modcp_nav_item modcp_nav_editprofile\">Hauspunkte Protokol</a></td></tr>
 ";
 }
 
